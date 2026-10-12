@@ -46,6 +46,7 @@
         if (-not (Get-Command cmake -ErrorAction SilentlyContinue)) { return $false }
         Write-Step "Building from source (this takes a minute)"
         Push-Location $Source
+        $ErrorActionPreference = 'Continue'  # build tools write progress to stderr
         try {
             cmake --preset release -DPEARCH_BUILD_TESTS=OFF -DPEARCH_BUILD_BENCH=OFF | Out-Null
             if ($LASTEXITCODE -ne 0) { return $false }
@@ -84,15 +85,20 @@
         Write-Step 'Trying the GitHub CLI'
         $ghArgs = @('release', 'download', '--repo', $Repo, '--pattern', $Asset, '--dir', $Work, '--clobber')
         if ($env:PEARCH_VERSION) { $ghArgs = @('release', 'download', $env:PEARCH_VERSION) + $ghArgs[2..($ghArgs.Length - 1)] }
-        & gh @ghArgs 2>$null
+        $ErrorActionPreference = 'Continue'  # Windows PowerShell treats native stderr as errors
+        & gh @ghArgs 2>$null | Out-Null
+        $ErrorActionPreference = 'Stop'
         $got = Test-Path $Download
     }
 
     # 4. Build the latest source.
     if (-not $got -and (Get-Command git -ErrorAction SilentlyContinue)) {
         $src = Join-Path $Work 'src'
+        $ErrorActionPreference = 'Continue'
         git clone --depth 1 "https://github.com/$Repo.git" $src 2>$null | Out-Null
-        if ($LASTEXITCODE -eq 0) { $got = Build-FromSource $src }
+        $cloned = $LASTEXITCODE -eq 0
+        $ErrorActionPreference = 'Stop'
+        if ($cloned) { $got = Build-FromSource $src }
     }
 
     if (-not $got) {
