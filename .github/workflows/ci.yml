@@ -42,6 +42,13 @@ jobs:
           PEARCH_NO_AVX2: '1'
         run: ctest --preset ${{ matrix.preset }}
 
+      - name: Test under the C locale
+        if: runner.os == 'Linux'
+        env:
+          LC_ALL: C
+          LANG: C
+        run: ctest --preset ${{ matrix.preset }}
+
       - name: Smoke test
         shell: bash
         run: |
