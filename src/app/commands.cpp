@@ -15,6 +15,7 @@
 #include "platform/console.h"
 #include "platform/shell.h"
 #include "tui/index_view.h"
+#include "tui/glyphs.h"
 #include "tui/pear3d.h"
 #include "tui/widgets.h"
 #include "tui/screen.h"
@@ -37,12 +38,12 @@ struct Out {
         return paint(s, tui::Style{color, tui::kDefault, attr}, mode);
     }
     void line(const std::string& s = "") const { raw(s + "\n"); }
-    void ok(const std::string& s) const { line("  " + c("✓", theme::kOk, tui::kBold) + " " + s); }
-    void fail(const std::string& s) const { line("  " + c("✗", theme::kError, tui::kBold) + " " + s); }
+    void ok(const std::string& s) const { line("  " + c(tui::glyphs().check, theme::kOk, tui::kBold) + " " + s); }
+    void fail(const std::string& s) const { line("  " + c(tui::glyphs().cross, theme::kError, tui::kBold) + " " + s); }
 };
 
 void eprint(term::ColorMode mode, const std::string& msg) {
-    std::string s = "  " + paint("✗", fg(theme::kError, tui::kBold), mode) + " " + msg + "\n";
+    std::string s = "  " + paint(tui::glyphs().cross, fg(theme::kError, tui::kBold), mode) + " " + msg + "\n";
     std::fwrite(s.data(), 1, s.size(), stderr);
 }
 
@@ -158,8 +159,8 @@ int cmd_help(const Options& o) {
     row("modified:week", "today, yesterday, week, month, year, 3d, 12h");
     out.line();
     h("KEYS");
-    out.line("    " + out.c("↑↓", theme::kLime) + out.c(" move   ", theme::kMuted) + out.c("⏎", theme::kLime) +
-             out.c(" open   ", theme::kMuted) + out.c("ctrl+⏎", theme::kLime) + out.c(" open & stay   ", theme::kMuted) +
+    out.line("    " + out.c("↑↓", theme::kLime) + out.c(" move   ", theme::kMuted) + out.c(tui::glyphs().enter, theme::kLime) +
+             out.c(" open   ", theme::kMuted) + out.c(std::string("ctrl+") + tui::glyphs().enter, theme::kLime) + out.c(" open & stay   ", theme::kMuted) +
              out.c("ctrl+o", theme::kLime) + out.c(" show in folder", theme::kMuted));
     out.line("    " + out.c("ctrl+y", theme::kLime) + out.c(" copy path   ", theme::kMuted) + out.c("tab", theme::kLime) +
              out.c(" files/folders/apps   ", theme::kMuted) + out.c("ctrl+s", theme::kLime) +
@@ -226,7 +227,7 @@ int cmd_tour(const Options& o) {
     ex("budget -draft", "leave words out");
     out.line();
     step("3", "Act");
-    out.line("       " + out.c("⏎", theme::kLime) + out.c(" open    ", theme::kMuted) + out.c("ctrl+o", theme::kLime) +
+    out.line("       " + out.c(tui::glyphs().enter, theme::kLime) + out.c(" open    ", theme::kMuted) + out.c("ctrl+o", theme::kLime) +
              out.c(" show in folder    ", theme::kMuted) + out.c("ctrl+y", theme::kLime) + out.c(" copy path", theme::kMuted));
     out.line("       " + out.c("tab", theme::kLime) + out.c(" files / folders / apps    ", theme::kMuted) +
              out.c("esc", theme::kLime) + out.c(" clear, then quit", theme::kMuted));

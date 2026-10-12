@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "core/text.h"
+#include "tui/glyphs.h"
 #include "tui/theme.h"
 
 namespace tui {
@@ -52,22 +53,23 @@ void draw_progress_bar(Canvas& c, int x, int y, int w, double frac, bool color) 
     const double cells = frac * w;
     const int full = static_cast<int>(cells);
     const bool half = (cells - full) >= 0.5 && full < w;
+    const Glyphs& g = glyphs();
     for (int i = 0; i < w; ++i) {
         float t = w > 1 ? static_cast<float>(i) / (w - 1) : 0.0f;
         uint32_t on = mix(theme::kLime, theme::kGold, t);
         if (i < full) {
-            c.put(x + i, y, U'━', color ? fg(on) : Style{kDefault, kDefault, kBold});
+            c.put(x + i, y, g.bar_on, color ? fg(on) : Style{kDefault, kDefault, kBold});
         } else if (i == full && half) {
-            c.put(x + i, y, U'╸', color ? fg(on) : Style{kDefault, kDefault, kBold});
+            c.put(x + i, y, g.bar_half, color ? fg(on) : Style{kDefault, kDefault, kBold});
         } else {
-            c.put(x + i, y, color ? U'━' : U'─', color ? fg(theme::kBorder) : Style{kDefault, kDefault, kDim});
+            c.put(x + i, y, color || !g.rich ? g.bar_off : U'─', color ? fg(theme::kBorder) : Style{kDefault, kDefault, kDim});
         }
     }
 }
 
 void draw_sparkline(Canvas& c, int x, int y, int w, const std::vector<double>& values, uint32_t color,
                     bool use_color) {
-    static const char32_t bars[] = {U'▁', U'▂', U'▃', U'▄', U'▅', U'▆', U'▇', U'█'};
+    const char32_t* bars = glyphs().spark_bars;
     if (values.empty() || w <= 0) return;
     double mx = *std::max_element(values.begin(), values.end());
     if (mx <= 0) mx = 1;
@@ -81,8 +83,8 @@ void draw_sparkline(Canvas& c, int x, int y, int w, const std::vector<double>& v
 }
 
 char32_t spinner(double t) {
-    static const char32_t frames[] = {U'⠋', U'⠙', U'⠹', U'⠸', U'⠼', U'⠴', U'⠦', U'⠧', U'⠇', U'⠏'};
-    return frames[static_cast<int>(t * 12.0) % 10];
+    const Glyphs& g = glyphs();
+    return g.spinner[static_cast<int>(t * (g.rich ? 12.0 : 8.0)) % g.spinner_frames];
 }
 
 }  // namespace tui

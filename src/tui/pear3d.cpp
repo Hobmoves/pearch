@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include "tui/glyphs.h"
 #include "tui/theme.h"
 
 namespace tui {
@@ -306,7 +307,7 @@ void draw_pear(Canvas& c, int x0, int y0, int w, int h, const PearParams& prm) {
 
     // Completion sparkles orbiting the pear.
     if (flash > 0.01f) {
-        static const char32_t twinkle[] = {U'·', U'+', U'✦', U'+', U'·'};
+        const char32_t twinkle[] = {U'·', U'+', glyphs().sparkle, U'+', U'·'};
         for (int i = 0; i < 12; ++i) {
             float a = static_cast<float>(i) * 0.5236f + sc.t * 0.35f;
             float r = 1.30f + 0.12f * std::sin(static_cast<float>(i) * 1.7f + sc.t * 2.1f);

@@ -10,6 +10,7 @@
 #include "core/format.h"
 #include "core/text.h"
 #include "tui/pear3d.h"
+#include "tui/glyphs.h"
 #include "tui/theme.h"
 #include "tui/widgets.h"
 
@@ -42,7 +43,7 @@ void draw_panel(Canvas& c, int x, int w, int top, int height, const IndexFrame& 
 
     // Title with spinner / check mark.
     if (f.done) {
-        c.text(x, y, "✓", st(theme::kOk, color, kBold));
+        c.text(x, y, glyphs().check, st(theme::kOk, color, kBold));
         c.text(x + 2, y, f.title, st(theme::kText, color, kBold), w - 2);
     } else {
         c.put(x, y, spinner(f.time), st(theme::kLime, color, kBold));
@@ -108,7 +109,8 @@ void draw_index_frame(Canvas& c, const IndexFrame& f, bool color) {
     }
     int y = std::max(0, H - info);
     const int x = 2, w = std::max(10, W - 4);
-    c.put(x, y, f.done ? U'✓' : spinner(f.time), st(f.done ? theme::kOk : theme::kLime, color, kBold));
+    if (f.done) c.text(x, y, glyphs().check, st(theme::kOk, color, kBold));
+    else c.put(x, y, spinner(f.time), st(theme::kLime, color, kBold));
     c.text(x + 2, y, f.title, st(theme::kText, color, kBold), w - 2);
     y += 1;
     const int bar_w = std::max(6, w - 6);
@@ -249,7 +251,7 @@ IndexOutcome run_index_plain(const IndexJob& job, bool quiet, term::ColorMode mo
         if (live) {
             double secs = seconds_since(t0);
             std::fprintf(stderr, "\r  %s indexing  %s items  (%s/s)   ",
-                         paint("●", fg(theme::kLime), mode).c_str(), fmt::thousands(prog.entries()).c_str(),
+                         paint(">", fg(theme::kLime), mode).c_str(), fmt::thousands(prog.entries()).c_str(),
                          fmt::compact(static_cast<uint64_t>(prog.entries() / std::max(0.1, secs))).c_str());
             std::fflush(stderr);
         }
@@ -261,7 +263,7 @@ IndexOutcome run_index_plain(const IndexJob& job, bool quiet, term::ColorMode mo
     out.seconds = seconds_since(t0);
     if (!quiet) {
         std::fprintf(stderr, "%s%s Indexed %s items in %s\n", live ? "\r\x1b[2K" : "",
-                     paint("✓", fg(theme::kOk, kBold), mode).c_str(), fmt::thousands(prog.entries()).c_str(),
+                     paint(glyphs().check, fg(theme::kOk, kBold), mode).c_str(), fmt::thousands(prog.entries()).c_str(),
                      fmt::duration(out.seconds).c_str());
     }
     return out;

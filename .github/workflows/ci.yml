@@ -25,7 +25,7 @@ jobs:
             os: macos-latest
             preset: release
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Configure
         run: cmake --preset ${{ matrix.preset }}

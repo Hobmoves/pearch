@@ -11,6 +11,7 @@
 #include "engine/matcher.h"
 #include "platform/shell.h"
 #include "tui/screen.h"
+#include "tui/glyphs.h"
 #include "tui/theme.h"
 #include "tui/widgets.h"
 
@@ -395,7 +396,7 @@ private:
         const int bx = 1, bw = W - 2;
         cur_.box(bx, y, bw, 3, S(query_.empty() ? theme::kBorder : theme::kBorderFocus));
         const int iy = y + 1;
-        cur_.text(bx + 2, iy, "❯", S(theme::kLime, kBold));
+        cur_.text(bx + 2, iy, glyphs().prompt, S(theme::kLime, kBold));
         std::string count;
         if (result_) {
             if (result_->recent && query_.empty()) count = "";
@@ -469,7 +470,7 @@ private:
         const int fy = H - 1;
         for (int i = 1; i < W - 1; ++i) cur_.put(i, fy - 1, U'─', S(theme::kBorder));
         if (toast_active()) {
-            cur_.text(2, fy, toast_ok_ ? "✓" : "!", S(toast_ok_ ? theme::kOk : theme::kError, kBold));
+            cur_.text(2, fy, toast_ok_ ? glyphs().check : "!", S(toast_ok_ ? theme::kOk : theme::kError, kBold));
             cur_.text(4, fy, text::truncate_middle(toast_, W - 6), S(toast_ok_ ? theme::kText : theme::kError));
         } else {
             draw_hints(2, fy, W - 4);
@@ -485,7 +486,7 @@ private:
     void draw_hints(int x, int y, int w) {
         struct Hint { const char* key; const char* label; };
         const Hint hints[] = {
-            {"↑↓", "move"}, {"⏎", "open"}, {"^O", "show in folder"}, {"^Y", "copy path"},
+            {"↑↓", "move"}, {glyphs().enter, "open"}, {"^O", "show in folder"}, {"^Y", "copy path"},
             {"tab", "type"}, {"^S", "sort"}, {"esc", query_.empty() ? "quit" : "clear"},
         };
         int used = 0;
@@ -563,7 +564,7 @@ private:
             const double frac = static_cast<double>(scroll_) / static_cast<double>(result_->size() - rows);
             const int pos = static_cast<int>(frac * (rows - 1) + 0.5);
             for (int r = 0; r < rows; ++r)
-                cur_.put(x + w, y + r, r == pos ? U'┃' : U'│', S(r == pos ? theme::kMuted : 0x2A303C));
+                cur_.put(x + w, y + r, r == pos ? glyphs().thumb : U'│', S(r == pos ? theme::kMuted : 0x2A303C));
         }
     }
 
@@ -662,7 +663,7 @@ private:
         }
         int hy = y + rows - 1;
         int hx = x;
-        hx += cur_.text(hx, hy, "⏎", S(theme::kLime, kBold)) + 1;
+        hx += cur_.text(hx, hy, glyphs().enter, S(theme::kLime, kBold)) + 1;
         hx += cur_.text(hx, hy, "open", S(theme::kFaint)) + 3;
         hx += cur_.text(hx, hy, "^O", S(theme::kLime, kBold)) + 1;
         cur_.text(hx, hy, "show in folder", S(theme::kFaint));

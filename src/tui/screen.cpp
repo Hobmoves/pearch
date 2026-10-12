@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "core/text.h"
+#include "tui/glyphs.h"
 
 namespace tui {
 
@@ -60,10 +61,11 @@ void Canvas::fill_bg(int x, int y, int w, int h, uint32_t bg) {
 
 void Canvas::box(int x, int y, int w, int h, Style st) {
     if (w < 2 || h < 2) return;
-    put(x, y, U'╭', st);
-    put(x + w - 1, y, U'╮', st);
-    put(x, y + h - 1, U'╰', st);
-    put(x + w - 1, y + h - 1, U'╯', st);
+    const Glyphs& g = glyphs();
+    put(x, y, g.tl, st);
+    put(x + w - 1, y, g.tr, st);
+    put(x, y + h - 1, g.bl, st);
+    put(x + w - 1, y + h - 1, g.br, st);
     for (int i = x + 1; i < x + w - 1; ++i) {
         put(i, y, U'─', st);
         put(i, y + h - 1, U'─', st);
