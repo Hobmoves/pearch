@@ -1,3 +1,0 @@
-C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/sqlite_src-populate.dir
-C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/ALL_BUILD.dir
-C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/ZERO_CHECK.dir
