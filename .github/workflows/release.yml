@@ -39,7 +39,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          cmake --preset release -DPEARCH_BUILD_BENCH=OFF -DPEARCH_PORTABLE=ON
+          cmake --preset release -DPEARCH_BUILD_BENCH=OFF -DPEARCH_PORTABLE=ON -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
           cmake --build --preset release --parallel
           ctest --preset release
 
