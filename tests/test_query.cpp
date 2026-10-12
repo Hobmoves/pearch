@@ -21,8 +21,9 @@ TEST(query_words_and_phrases) {
 TEST(query_filters) {
     Query q = P("*.pdf");
     CHECK(q.terms.empty());
-    CHECK_EQ(q.exts.size(), size_t{1});
-    CHECK_EQ(q.exts[0], std::string("pdf"));
+    CHECK_EQ(q.ext_prefixes.size(), size_t{1});
+    CHECK_EQ(q.ext_prefixes[0], std::string("pdf"));
+    CHECK(P("*.").terms.empty() && !P("*.").has_filters());  // still typing
     Query e = P("ext:pdf,.DOCX report");
     CHECK_EQ(e.exts.size(), size_t{2});
     CHECK_EQ(e.exts[1], std::string("docx"));

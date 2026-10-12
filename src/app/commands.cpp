@@ -15,6 +15,8 @@
 #include "platform/console.h"
 #include "platform/shell.h"
 #include "tui/index_view.h"
+#include "tui/pear3d.h"
+#include "tui/widgets.h"
 #include "tui/screen.h"
 #include "tui/search_view.h"
 #include "tui/theme.h"
@@ -168,6 +170,75 @@ int cmd_help(const Options& o) {
     h("OPTIONS");
     row("-l, --list", "print results          -n, --limit N   at most N");
     row("--no-color", "plain output           -q, --quiet     less output");
+    out.line();
+    return 0;
+}
+
+// A short guided tour, shown after installing (and any time: `pearch tour`).
+int cmd_tour(const Options& o) {
+    term::prepare_output();
+    const term::ColorMode mode = term::stdout_is_tty() ? term::detect_color(o.no_color) : term::ColorMode::None;
+    Out out{mode};
+    // A ripe pear next to the title, drawn by the same renderer as the indexing screen.
+    tui::Canvas art(std::max(70, std::min(100, term::output_width() - 4)), 12);
+    tui::PearParams pp;
+    pp.time = 0.9;
+    pp.progress = 1.0;
+    pp.color = mode != term::ColorMode::None;
+    tui::draw_pear(art, 0, 0, 22, 12, pp);
+    tui::draw_small_wordmark(art, 26, 3, pp.color);
+    auto label = [&](int y, const std::string& s, uint32_t c, uint8_t attr = 0) {
+        art.text(26, y, s, pp.color ? tui::Style{c, tui::kDefault, attr} : tui::Style{tui::kDefault, tui::kDefault, attr});
+    };
+    label(5, "instant file search", theme::kText, tui::kBold);
+    label(6, std::string("version ") + PEARCH_VERSION + "  ·  " + hw::summary(), theme::kFaint);
+    label(8, "Here's the 30-second tour.", theme::kMuted);
+    out.line();
+    for (const auto& l : tui::to_lines(art, mode)) out.line("  " + l);
+    out.line();
+
+    auto step = [&](const char* n, const char* title) {
+        out.line("  " + out.c(n, theme::kGold, tui::kBold) + "  " + out.c(title, theme::kText, tui::kBold));
+    };
+    auto ex = [&](const std::string& what, const std::string& desc) {
+        out.line("       " + out.c(text::pad_right(what, 22), theme::kLime) + out.c(desc, theme::kMuted));
+    };
+    auto note = [&](const std::string& s) { out.line("       " + out.c(s, theme::kMuted)); };
+
+#ifdef _WIN32
+    step("1", "Open it");
+    ex("Ctrl+Alt+Space", "from anywhere in Windows (after install)");
+    ex("pearch", "from any terminal");
+    note("The first launch indexes your files while the pear fills up.");
+#else
+    step("1", "Open it");
+    ex("pearch", "from any terminal (bind it to a key in your desktop settings)");
+    note("The first launch indexes your files while the pear fills up.");
+#endif
+    out.line();
+    step("2", "Type");
+    note("Results update on every key. Try:");
+    ex("q3 report", "words in any order");
+    ex("*.pdf", "every PDF, newest first");
+    ex("vs code", "apps by name or initials");
+    ex("in:downloads", "inside a folder");
+    ex("modified:week", "changed this week");
+    ex("budget -draft", "leave words out");
+    out.line();
+    step("3", "Act");
+    out.line("       " + out.c("⏎", theme::kLime) + out.c(" open    ", theme::kMuted) + out.c("ctrl+o", theme::kLime) +
+             out.c(" show in folder    ", theme::kMuted) + out.c("ctrl+y", theme::kLime) + out.c(" copy path", theme::kMuted));
+    out.line("       " + out.c("tab", theme::kLime) + out.c(" files / folders / apps    ", theme::kMuted) +
+             out.c("esc", theme::kLime) + out.c(" clear, then quit", theme::kMuted));
+    out.line();
+    step("4", "Make it yours");
+#ifdef _WIN32
+    ex("pearch add D:\\", "index another drive");
+#else
+    ex("pearch add ~/code", "index another folder or drive");
+#endif
+    ex("pearch stats", "what's indexed + how pearch uses your hardware");
+    ex("pearch help", "everything else");
     out.line();
     return 0;
 }
@@ -569,6 +640,7 @@ int run(const Options& o) {
         case Command::Uninstall: return cmd_install(o, false);
         case Command::Scan: return cmd_scan(o);
         case Command::PearDemo: return cmd_pear(o);
+        case Command::Tour: return cmd_tour(o);
         case Command::Search: return cmd_search(o);
     }
     return 0;

@@ -6,6 +6,9 @@
 #include <unistd.h>
 
 #include <climits>
+#ifdef __APPLE__
+#include <mach-o/dyld.h>
+#endif
 #include <cstdio>
 #include <cstdlib>
 #include <filesystem>
@@ -89,6 +92,11 @@ std::string data_dir() {
 }
 
 std::string exe_path() {
+#ifdef __APPLE__
+    char mac[PATH_MAX];
+    uint32_t size = sizeof mac;
+    if (_NSGetExecutablePath(mac, &size) == 0) return mac;
+#endif
     char buf[PATH_MAX];
     ssize_t n = ::readlink("/proc/self/exe", buf, sizeof buf - 1);
     if (n > 0) return std::string(buf, static_cast<size_t>(n));

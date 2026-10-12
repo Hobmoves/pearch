@@ -443,7 +443,7 @@ private:
         }
         tab_x_[4] = x;
         std::string sort_label;
-        if (result_ && result_->recent && query_.empty())
+        if (result_ && result_->recent)
             sort_label = tab_ == 3 ? "all apps" : "recent";
         else
             sort_label = std::string("sorted by ") + engine::sort_mode_name(result_ ? result_->sort : sort_);

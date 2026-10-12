@@ -35,6 +35,7 @@ Options parse(const std::vector<std::string>& argv) {
         if (a == "--no-color" || a == "--no-colour") { o.no_color = true; continue; }
         if (a == "--purge") { o.purge = true; continue; }
         if (a == "--pear") { o.cmd = Command::PearDemo; command_seen = true; continue; }
+        if (a == "--tour") { o.cmd = Command::Tour; return o; }
         if (a == "-n" || a == "--limit") {
             std::string v;
             if (!next(v)) { o.error = a + " needs a number"; return o; }
@@ -81,6 +82,7 @@ Options parse(const std::vector<std::string>& argv) {
             if (a == "install") { o.cmd = Command::Install; continue; }
             if (a == "uninstall") { o.cmd = Command::Uninstall; continue; }
             if (a == "help") { o.cmd = Command::Help; return o; }
+            if (a == "tour" || a == "guide" || a == "demo") { o.cmd = Command::Tour; return o; }
             if (a == "version") { o.cmd = Command::Version; return o; }
         }
         o.args.push_back(a);

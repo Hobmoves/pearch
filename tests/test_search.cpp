@@ -119,6 +119,10 @@ TEST(search_filters_and_operators) {
     auto txt = run(f.store, "*.txt");
     for (const auto& n : names(txt)) CHECK(n.size() > 4 && n.substr(n.size() - 4) == ".txt");
     CHECK_EQ(txt.size(), size_t{5});
+    auto typing = run(f.store, "*.tx");  // partially typed extension still finds them
+    CHECK_EQ(typing.size(), size_t{5});
+    auto exact = run(f.store, "ext:tx");
+    CHECK(exact.empty());
     auto glob = run(f.store, "f*o");
     CHECK(pos(names(glob), "foo") >= 0);
     CHECK(pos(names(glob), "foo_bar") < 0);

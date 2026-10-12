@@ -34,7 +34,8 @@ struct Term {
 struct Query {
     std::string raw;
     std::vector<Term> terms;
-    std::vector<std::string> exts;  // folded, no dot
+    std::vector<std::string> exts;  // folded, no dot (ext:pdf, exact)
+    std::vector<std::string> ext_prefixes;  // from *.pd while typing: extension starts with this
     TypeFilter type = TypeFilter::All;
     std::optional<uint64_t> size_min, size_max;
     std::optional<int64_t> modified_after;  // unix ms

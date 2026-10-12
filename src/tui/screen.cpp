@@ -185,6 +185,31 @@ std::string Renderer::diff(const Canvas& prev, const Canvas& next, bool full) co
     return out;
 }
 
+std::vector<std::string> to_lines(const Canvas& c, term::ColorMode mode) {
+    Renderer r(mode);
+    std::vector<std::string> out;
+    for (int y = 0; y < c.height(); ++y) {
+        std::string line;
+        Style pen;
+        bool known = false;
+        int last = c.width() - 1;
+        while (last >= 0 && c.at(last, y).ch == U' ' && c.at(last, y).style.bg == kDefault) --last;
+        for (int x = 0; x <= last; ++x) {
+            const Cell& cell = c.at(x, y);
+            if (cell.width == 0) continue;
+            if (mode != term::ColorMode::None && (!known || !(pen == cell.style))) {
+                line += r.sgr(cell.style);
+                pen = cell.style;
+                known = true;
+            }
+            text::append_utf8(line, cell.ch ? cell.ch : U' ');
+        }
+        if (known) line += "\x1b[0m";
+        out.push_back(std::move(line));
+    }
+    return out;
+}
+
 std::string paint(std::string_view s, Style st, term::ColorMode mode) {
     if (mode == term::ColorMode::None) return std::string(s);
     Renderer r(mode);

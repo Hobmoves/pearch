@@ -181,10 +181,11 @@ Query parse_query(std::string_view input, int64_t now_ms) {
 
         std::string folded = text::fold(t);
         if (!tok.quoted && (folded.find('*') != std::string::npos || folded.find('?') != std::string::npos)) {
-            // "*.pdf" is just an extension filter (much faster than a glob).
-            if (!negate && folded.size() > 2 && folded[0] == '*' && folded[1] == '.' &&
+            // "*.pdf" is just an extension filter (much faster than a glob). It
+            // matches by prefix so results don't vanish while you type "*.p".
+            if (!negate && folded.size() >= 2 && folded[0] == '*' && folded[1] == '.' &&
                 folded.find_first_of("*?/\\", 2) == std::string::npos) {
-                q.exts.push_back(folded.substr(2));
+                if (folded.size() > 2) q.ext_prefixes.push_back(folded.substr(2));
                 continue;
             }
             bool all_wild = folded.find_first_not_of("*?") == std::string::npos;
@@ -210,11 +211,12 @@ bool Query::has_positive_name_terms() const noexcept {
 }
 
 bool Query::has_filters() const noexcept {
-    return !exts.empty() || type != TypeFilter::All || size_min || size_max || modified_after;
+    return !exts.empty() || !ext_prefixes.empty() || type != TypeFilter::All || size_min || size_max ||
+           modified_after;
 }
 
 bool Query::refines(const Query& prev) const noexcept {
-    if (type != prev.type || exts != prev.exts || size_min != prev.size_min ||
+    if (type != prev.type || exts != prev.exts || ext_prefixes != prev.ext_prefixes || size_min != prev.size_min ||
         size_max != prev.size_max || modified_after != prev.modified_after)
         return false;
     std::vector<const Term*> a_pos, b_pos, a_other, b_other;

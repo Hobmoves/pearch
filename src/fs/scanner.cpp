@@ -56,7 +56,7 @@ struct Task {
 bool is_app_file(std::string_view folded_name, bool in_app_folder) {
     std::string_view ext = text::extension_of(folded_name);
     if (ext == "lnk" || ext == "url" || ext == "appref-ms") return true;
-    return in_app_folder && ext == "exe";
+    return in_app_folder && (ext == "exe" || ext == "desktop");
 }
 
 class Scanner {
@@ -192,6 +192,14 @@ private:
             r.child_dir = kNone;
             if (e.is_dir) {
                 ++dirs;
+#ifdef __APPLE__
+                // A macOS .app bundle is one app, not a folder to dig through.
+                if (text::extension_of(folded) == "app") {
+                    r.flags |= engine::kApp;
+                    arena.recs.push_back(r);
+                    continue;
+                }
+#endif
                 if (!e.link && !skip_names_.count(std::string(folded))) {
                     std::string child = fileio::join(task.utf8, e.name);
                     std::string child_folded = text::fold(child);

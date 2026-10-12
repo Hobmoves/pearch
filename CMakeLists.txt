@@ -20,6 +20,7 @@ endif()
 option(PEARCH_BUILD_TESTS "Build the test suite" ON)
 option(PEARCH_BUILD_BENCH "Build the search benchmark" ON)
 option(PEARCH_SANITIZE "Build with AddressSanitizer + UBSan (GCC/Clang)" OFF)
+option(PEARCH_PORTABLE "Link the C++ runtime statically so the binary runs on other machines" OFF)
 
 # Ship a self-contained exe: no VC++ redistributable needed on the target PC.
 if(MSVC)
@@ -47,6 +48,12 @@ function(pearch_configure_target target)
     endif()
     if(PEARCH_HAS_IPO AND NOT PEARCH_SANITIZE)
         set_property(TARGET ${target} PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
+    endif()
+    if(MINGW)
+        # Self-contained executables: no libstdc++/winpthread DLLs needed.
+        target_link_options(${target} PRIVATE -static)
+    elseif(PEARCH_PORTABLE AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        target_link_options(${target} PRIVATE -static-libstdc++ -static-libgcc)
     endif()
 endfunction()
 
@@ -80,7 +87,7 @@ if(WIN32)
         src/platform/console_win.cpp
         src/platform/shell_win.cpp)
     target_compile_definitions(pearch_core PUBLIC
-        UNICODE _UNICODE WIN32_LEAN_AND_MEAN NOMINMAX _WIN32_WINNT=0x0A00)
+        UNICODE _UNICODE WIN32_LEAN_AND_MEAN NOMINMAX _WIN32_WINNT=0x0A00 _CRT_SECURE_NO_WARNINGS)
     target_link_libraries(pearch_core PUBLIC shell32 ole32 uuid advapi32 user32)
 else()
     target_sources(pearch_core PRIVATE
@@ -111,9 +118,6 @@ if(WIN32)
     if(MSVC)
         # The manifest is embedded by the .rc file instead of the linker.
         target_link_options(pearch PRIVATE /MANIFEST:NO)
-    endif()
-    if(MINGW)
-        target_link_options(pearch PRIVATE -static)
     endif()
 endif()
 

@@ -66,7 +66,7 @@ inline std::string_view display_name(const engine::IndexStore& s, uint32_t id) {
     std::string_view n = s.name(id);
     if (s.flags(id) & engine::kApp) {
         std::string_view ext = text::extension_of(s.folded(id));
-        if (ext == "lnk" || ext == "url" || ext == "appref-ms" || ext == "desktop")
+        if (ext == "lnk" || ext == "url" || ext == "appref-ms" || ext == "desktop" || ext == "app")
             n = n.substr(0, n.size() - ext.size() - 1);
     }
     return n;

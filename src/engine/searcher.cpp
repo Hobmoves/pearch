@@ -105,13 +105,15 @@ struct Ctx {
             case TypeFilter::Folders: if (!(f & kDir)) return false; break;
             case TypeFilter::Apps: if (!(f & kApp)) return false; break;
         }
-        if (!q.exts.empty()) {
+        if (!q.exts.empty() || !q.ext_prefixes.empty()) {
             if (f & kDir) return false;
             std::string_view ext = text::extension_of(s.folded(i));
             if (ext.empty()) return false;
             bool hit = false;
             for (const auto& e : q.exts)
                 if (ext == e) { hit = true; break; }
+            for (const auto& e : q.ext_prefixes)
+                if (ext.starts_with(e)) { hit = true; break; }
             if (!hit) return false;
         }
         if (q.size_min || q.size_max) {

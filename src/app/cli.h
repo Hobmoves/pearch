@@ -8,7 +8,7 @@
 namespace app {
 
 enum class Command {
-    Search, Index, Add, Remove, Locations, Stats, Install, Uninstall, Help, Version, Scan, PearDemo,
+    Search, Index, Add, Remove, Locations, Stats, Install, Uninstall, Help, Version, Scan, PearDemo, Tour,
 };
 
 struct Options {

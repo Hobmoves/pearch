@@ -14,8 +14,11 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include <sys/sysmacros.h>
+#include <sys/types.h>
 #include <unistd.h>
+#ifdef __linux__
+#include <sys/sysmacros.h>
+#endif
 #include <fstream>
 #endif
 
@@ -156,6 +159,10 @@ Storage storage_for(const std::string& path) {
 }
 #else
 Storage storage_for(const std::string& path) {
+#ifndef __linux__
+    (void)path;
+    return Storage::Unknown;  // macOS: every current Mac boots from an NVMe-class SSD
+#else
     struct stat st;
     if (::stat(path.c_str(), &st) != 0) return Storage::Unknown;
     if (major(st.st_dev) == 0) return Storage::Unknown;  // tmpfs, overlay, network...
@@ -170,6 +177,7 @@ Storage storage_for(const std::string& path) {
         if (f >> rot) return rot ? Storage::Hdd : Storage::Ssd;
     }
     return Storage::Unknown;
+#endif
 }
 #endif
 

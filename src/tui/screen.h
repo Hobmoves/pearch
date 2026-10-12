@@ -73,6 +73,10 @@ uint32_t mix(uint32_t a, uint32_t b, float t);
 uint32_t scale(uint32_t c, float k);
 uint8_t to_xterm256(uint32_t c);
 
+// A canvas as plain lines of text with colour escapes (for normal,
+// scrolling output such as `pearch tour`).
+std::vector<std::string> to_lines(const Canvas& c, term::ColorMode mode);
+
 // Coloured text for plain (line-by-line) output; resets afterwards.
 // ColorMode::None returns the text unchanged.
 std::string paint(std::string_view text, Style st, term::ColorMode mode);
