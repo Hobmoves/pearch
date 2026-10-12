@@ -1,0 +1,93 @@
+name: Release
+
+# Push a tag like v1.0.0 (or run this workflow by hand) to build pearch for
+# every platform and publish a GitHub release. The install one-liners always
+# download from the latest release.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag, e.g. v1.0.0 (created if it does not exist)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ matrix.asset }}
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.optional || false }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            asset: pearch-windows-x64.exe
+          - os: ubuntu-22.04
+            asset: pearch-linux-x64
+          - os: macos-latest
+            asset: pearch-macos-arm64
+          - os: macos-15-intel
+            asset: pearch-macos-x64
+            optional: true
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build
+        shell: bash
+        run: |
+          cmake --preset release -DPEARCH_BUILD_BENCH=OFF -DPEARCH_PORTABLE=ON -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+          cmake --build --preset release --parallel
+          ctest --preset release
+
+      - name: Package
+        shell: bash
+        run: |
+          mkdir -p dist
+          exe=$(find build/release -type f \( -name pearch.exe -o -name pearch \) | head -1)
+          cp "$exe" "dist/${{ matrix.asset }}"
+          "dist/${{ matrix.asset }}" --version
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: dist/${{ matrix.asset }}
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Checksums
+        run: |
+          cd dist
+          sha256sum pearch-* > SHA256SUMS
+          cat SHA256SUMS
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          name: pearch ${{ github.event.inputs.tag || github.ref_name }}
+          files: dist/*
+          generate_release_notes: true
+          body: |
+            ## Install
+
+            **Windows** (PowerShell):
+            ```powershell
+            irm https://raw.githubusercontent.com/${{ github.repository }}/main/install.ps1 | iex
+            ```
+
+            **Linux / macOS**:
+            ```sh
+            curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/install.sh | sh
+            ```
+
+            Then press **Ctrl+Alt+Space** (Windows) or run `pearch`, and start typing.

@@ -1,7 +1,0 @@
-C:\projects\pearch\src\main.cpp;C:\projects\pearch\build\pearch.dir\Release\main.obj
-C:\projects\pearch\src\cli\cli.cpp;C:\projects\pearch\build\pearch.dir\Release\cli.obj
-C:\projects\pearch\src\ui\terminal.cpp;C:\projects\pearch\build\pearch.dir\Release\terminal.obj
-C:\projects\pearch\src\ui\dashboard.cpp;C:\projects\pearch\build\pearch.dir\Release\dashboard.obj
-C:\projects\pearch\src\filesystem\scanner.cpp;C:\projects\pearch\build\pearch.dir\Release\scanner.obj
-C:\projects\pearch\src\index\database.cpp;C:\projects\pearch\build\pearch.dir\Release\database.obj
-C:\projects\pearch\src\index\index.cpp;C:\projects\pearch\build\pearch.dir\Release\index.obj

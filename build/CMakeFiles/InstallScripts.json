@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"C:/projects/pearch/build/cmake_install.cmake",
-		"C:/projects/pearch/build/tests/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

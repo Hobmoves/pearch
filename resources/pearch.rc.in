@@ -1,0 +1,36 @@
+// Windows resources for pearch.exe: icon, version information, manifest.
+// Configured by CMake (absolute paths) into the build folder.
+#include <windows.h>
+#include "core/version.h"
+
+1 ICON "@PEARCH_ICON_PATH@"
+
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "@PEARCH_MANIFEST_PATH@"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION    PEARCH_VERSION_MAJOR, PEARCH_VERSION_MINOR, PEARCH_VERSION_PATCH, 0
+ PRODUCTVERSION PEARCH_VERSION_MAJOR, PEARCH_VERSION_MINOR, PEARCH_VERSION_PATCH, 0
+ FILEFLAGSMASK  VS_FFI_FILEFLAGSMASK
+ FILEFLAGS      0
+ FILEOS         VOS_NT_WINDOWS32
+ FILETYPE       VFT_APP
+ FILESUBTYPE    VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName",      "pearch"
+            VALUE "FileDescription",  "pearch - instant file search"
+            VALUE "FileVersion",      PEARCH_VERSION
+            VALUE "InternalName",     "pearch"
+            VALUE "OriginalFilename", "pearch.exe"
+            VALUE "ProductName",      "pearch"
+            VALUE "ProductVersion",   PEARCH_VERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END
