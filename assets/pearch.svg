@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- pearch: a pear whose body is a magnifying glass -->
+  <defs>
+    <linearGradient id="skin" x1="0.15" y1="0.05" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#D4F26E"/>
+      <stop offset="0.45" stop-color="#B5E655"/>
+      <stop offset="1" stop-color="#F2B544"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="0.32" cy="0.28" r="0.5">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glass" cx="0.38" cy="0.32" r="0.75">
+      <stop offset="0" stop-color="#4C5D7A"/>
+      <stop offset="0.6" stop-color="#26304A"/>
+      <stop offset="1" stop-color="#151B2B"/>
+    </radialGradient>
+    <linearGradient id="handle" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6E7A99"/>
+      <stop offset="1" stop-color="#3A4258"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#3F8F2E"/>
+      <stop offset="1" stop-color="#7FD15A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- handle -->
+  <line x1="150" y1="198" x2="222" y2="240" stroke="url(#handle)" stroke-width="30" stroke-linecap="round"/>
+  <line x1="168" y1="205" x2="214" y2="232" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="6" stroke-linecap="round"/>
+  <line x1="146" y1="195" x2="164" y2="206" stroke="#C99A2E" stroke-width="32" stroke-linecap="round"/>
+
+  <!-- stem + leaf -->
+  <path d="M100 36 C100 24 104 14 113 7" fill="none" stroke="#7A5230" stroke-width="9" stroke-linecap="round"/>
+  <path d="M108 24 C121 5 147 3 160 13 C147 28 122 34 108 24 Z" fill="url(#leaf)"/>
+  <path d="M112 23 C126 17 140 14 154 13" fill="none" stroke="#2F6E22" stroke-opacity="0.6" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- pear body -->
+  <path d="M100 30 C124 30 136 48 138 70 C140 92 148 104 160 118 C178 138 182 168 172 190
+           C160 214 134 224 100 224 C66 224 40 214 28 190 C18 168 22 138 40 118
+           C52 104 60 92 62 70 C64 48 76 30 100 30 Z"
+        fill="url(#skin)" stroke="#5E7A22" stroke-opacity="0.55" stroke-width="3"/>
+  <path d="M100 30 C124 30 136 48 138 70 C140 92 148 104 160 118 C178 138 182 168 172 190
+           C160 214 134 224 100 224 C66 224 40 214 28 190 C18 168 22 138 40 118
+           C52 104 60 92 62 70 C64 48 76 30 100 30 Z" fill="url(#shine)"/>
+
+  <!-- lens -->
+  <circle cx="100" cy="160" r="47" fill="url(#glass)"/>
+  <circle cx="100" cy="160" r="47" fill="none" stroke="#0F1420" stroke-opacity="0.55" stroke-width="5"/>
+  <circle cx="100" cy="160" r="42.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="2"/>
+  <path d="M67 149 A34 34 0 0 1 89 127" fill="none" stroke="#FFFFFF" stroke-opacity="0.75" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="122" cy="186" r="4" fill="#FFFFFF" stroke="none" opacity="0.35"/>
+</svg>

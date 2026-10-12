@@ -1,28 +1,13 @@
-cmake_minimum_required(VERSION 3.20)
-
-add_executable(test_index
-    tests/test_index.cpp
-    ${CMAKE_SOURCE_DIR}/src/index/database.cpp
-    ${CMAKE_SOURCE_DIR}/src/index/index.cpp
-    ${CMAKE_SOURCE_DIR}/src/filesystem/scanner.cpp
+add_executable(pearch_tests
+    test_main.cpp
+    test_text.cpp
+    test_query.cpp
+    test_search.cpp
+    test_store.cpp
+    test_scanner.cpp
+    test_render.cpp
+    test_matcher.cpp
 )
-
-target_include_directories(test_index PRIVATE ${CMAKE_SOURCE_DIR}/src)
-
-# Link SQLite the same way as the main target
-if (TARGET SQLite::SQLite3)
-    target_link_libraries(test_index PRIVATE SQLite::SQLite3)
-elseif (TARGET SQLite3::SQLite3)
-    target_link_libraries(test_index PRIVATE SQLite3::SQLite3)
-elseif(TARGET sqlite3_static)
-    target_link_libraries(test_index PRIVATE sqlite3_static)
-elseif (DEFINED SQLite3_LIBRARY)
-    target_include_directories(test_index PRIVATE ${SQLite3_INCLUDE_DIR})
-    target_link_libraries(test_index PRIVATE ${SQLite3_LIBRARY})
-else()
-    target_link_libraries(test_index PRIVATE sqlite3)
-endif()
-
-target_link_libraries(test_index PRIVATE Shell32 Ole32)
-
-add_test(NAME index_tests COMMAND test_index)
+target_link_libraries(pearch_tests PRIVATE pearch_core)
+pearch_configure_target(pearch_tests)
+add_test(NAME pearch_tests COMMAND pearch_tests)
