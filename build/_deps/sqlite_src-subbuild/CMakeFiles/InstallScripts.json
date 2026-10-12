@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/projects/pearch/build/_deps/sqlite_src-subbuild/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

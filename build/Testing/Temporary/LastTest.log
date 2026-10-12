@@ -1,0 +1,19 @@
+Start testing: Aug 18 02:17 Eastern Daylight Time
+----------------------------------------------------------
+1/1 Testing: index_tests
+1/1 Test: index_tests
+Command: "C:/projects/pearch/build/tests/Release/test_index.exe"
+Directory: C:/projects/pearch/build/tests
+"index_tests" start time: Aug 18 02:17 Eastern Daylight Time
+Output:
+----------------------------------------------------------
+Checks: 20, Failures: 0
+<end of output>
+Test time =   0.23 sec
+----------------------------------------------------------
+Test Passed.
+"index_tests" end time: Aug 18 02:17 Eastern Daylight Time
+"index_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 18 02:17 Eastern Daylight Time

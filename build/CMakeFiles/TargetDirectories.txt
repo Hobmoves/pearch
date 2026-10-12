@@ -1,0 +1,6 @@
+C:/projects/pearch/build/CMakeFiles/pearch.dir
+C:/projects/pearch/build/CMakeFiles/RUN_TESTS.dir
+C:/projects/pearch/build/CMakeFiles/ALL_BUILD.dir
+C:/projects/pearch/build/CMakeFiles/ZERO_CHECK.dir
+C:/projects/pearch/build/tests/CMakeFiles/test_index.dir
+C:/projects/pearch/build/tests/CMakeFiles/RUN_TESTS.dir

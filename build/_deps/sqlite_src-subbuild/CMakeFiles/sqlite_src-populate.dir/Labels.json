@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/sqlite_src-populate"
+		},
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/626ef123d236c1c0e59cf3cf4da9f301/sqlite_src-populate.rule"
+		},
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/212ea2cb4c35bb4fc7a0cd3716e4b7b1/sqlite_src-populate-complete.rule"
+		},
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/33ab5da62cce92ad27af56993c9c9d1e/sqlite_src-populate-build.rule"
+		},
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/33ab5da62cce92ad27af56993c9c9d1e/sqlite_src-populate-configure.rule"
+		},
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/33ab5da62cce92ad27af56993c9c9d1e/sqlite_src-populate-download.rule"
+		},
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/33ab5da62cce92ad27af56993c9c9d1e/sqlite_src-populate-install.rule"
+		},
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/33ab5da62cce92ad27af56993c9c9d1e/sqlite_src-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/33ab5da62cce92ad27af56993c9c9d1e/sqlite_src-populate-patch.rule"
+		},
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/33ab5da62cce92ad27af56993c9c9d1e/sqlite_src-populate-test.rule"
+		},
+		{
+			"file" : "C:/projects/pearch/build/_deps/sqlite_src-subbuild/CMakeFiles/33ab5da62cce92ad27af56993c9c9d1e/sqlite_src-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"sqlite_src-populate"
+		],
+		"name" : "sqlite_src-populate"
+	}
+}
