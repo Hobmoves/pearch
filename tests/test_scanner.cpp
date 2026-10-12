@@ -27,7 +27,7 @@ struct TempTree {
         touch(root / "b" / "c.md", 10);
         touch(root / "b" / "d" / "e.bin", 1234);
         touch(root / "node_modules" / "pkg" / "x.js", 5);
-        touch(root / fs::path(text::to_wide("Café.txt")), 3);
+        touch(root / u8path("Café.txt"), 3);
         touch(root / "apps" / "Tool.lnk", 7);
         touch(root / "apps" / "tool.exe", 7);
         touch(root / "skipme" / "hidden.txt", 7);
@@ -43,7 +43,21 @@ struct TempTree {
         std::ofstream f(p, std::ios::binary);
         f << std::string(bytes, 'x');
     }
-    std::string str(const fs::path& p) const { return fileio::absolute(text::to_utf8(p.wstring())); }
+    std::string str(const fs::path& p) const {
+#ifdef _WIN32
+        return fileio::absolute(text::to_utf8(p.wstring()));
+#else
+        return fileio::absolute(p.string());  // POSIX paths are bytes; no locale conversion
+#endif
+    }
+    // A path from UTF-8 text without depending on the C locale.
+    static fs::path u8path(const std::string& s) {
+#ifdef _WIN32
+        return fs::path(text::to_wide(s));
+#else
+        return fs::path(s);
+#endif
+    }
 };
 
 }  // namespace
